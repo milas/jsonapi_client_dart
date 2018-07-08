@@ -28,3 +28,5 @@ pubspec.lock
 
 .floo
 .flooignore
+
+.dart_tool/
