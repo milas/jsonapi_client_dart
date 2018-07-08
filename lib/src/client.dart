@@ -57,10 +57,10 @@ class JSONAPIClient {
     return Uri.parse(url);
   }
 
-  _call(String method, String url,
-      {String payload: null,
-      List<String> includeModels: null,
-      Map additionalHeaders: null}) async {
+  Future<JSONAPIDocument> _call(String method, String url,
+      {String payload,
+      List<String> includeModels,
+      Map additionalHeaders}) async {
 
     request = new http.Request(method, _composeUri(url, includeModels));
 
@@ -95,5 +95,6 @@ class JSONAPIClient {
       default:
         return new JSONAPIDocument(JSON.decode(await response.stream.bytesToString()));
     }
+    return null;
   }
 }
