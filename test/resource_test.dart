@@ -10,23 +10,23 @@ import "package:test/test.dart";
 void main() {
   group("test Resource creation", () {
     test("create a JSONAPIResource from a Map", () {
-      Map dataMap = new Map();
+      var dataMap = new Map<String, dynamic>();
       dataMap['type'] = 'person';
-      dataMap['attributes'] = new Map();
+      dataMap['attributes'] = new Map<String, dynamic>();
       dataMap['attributes']['name'] = 'Pasquale';
 
-      JsonApiResource expectedResource = new JsonApiResource(dataMap);
+      JsonApiResource expectedResource = JsonApiResource.fromJson(dataMap);
 
       expect(expectedResource.type, equals('person'));
     });
 
     test("create a JSONAPIResource with no type", () {
-      Map dataMap = new Map();
-      dataMap['attributes'] = new Map();
+      var dataMap = new Map<String, dynamic>();
+      dataMap['attributes'] = new Map<String, dynamic>();
       dataMap['attributes']['name'] = 'Pasquale';
 
       expect(() {
-        new JsonApiResource(dataMap);
+        JsonApiResource.fromJson(dataMap);
       }, throwsFormatException);
     });
   });
@@ -35,20 +35,9 @@ void main() {
     test("encode JSONAPIResource into a Map", () {
       String inputJson = '{"type":"person","attributes":{"name":"Pasquale"}}';
 
-      Map inputMap = jsonDecode(inputJson);
-      JsonApiResource resource = new JsonApiResource(inputMap);
-      String outputJson = jsonEncode(resource);
-
-      expect(outputJson, equals(inputJson));
-    });
-
-    test("encode JSONAPIResourceList into a Map", () {
-      String inputJson =
-          '[{"type":"person","attributes":{"name":"Pasquale"}},{"type":"person","attributes":{"name":"Federico"}}]';
-
-      List<Map> inputMap = jsonDecode(inputJson);
-      JSONAPIResourceList resourceList = new JSONAPIResourceList(inputMap);
-      String outputJson = jsonEncode(resourceList);
+      Map<String, dynamic> inputMap = jsonDecode(inputJson);
+      JsonApiResource resource = JsonApiResource.fromJson(inputMap);
+      String outputJson = jsonEncode(resource.toJson());
 
       expect(outputJson, equals(inputJson));
     });

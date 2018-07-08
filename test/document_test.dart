@@ -7,10 +7,10 @@ import 'dart:convert';
 import "package:jsonapi_client/jsonapi_client.dart";
 import "package:test/test.dart";
 
-Map getMockJSONAPIResourceAsMap() {
-  Map dataMap = new Map();
+Map<String, dynamic> getMockJSONAPIResourceAsMap() {
+  var dataMap = new Map<String, dynamic>();
   dataMap['type'] = 'person';
-  dataMap['attributes'] = new Map();
+  dataMap['attributes'] = new Map<String, dynamic>();
   dataMap['attributes']['name'] = 'Pasquale';
   return dataMap;
 }
@@ -18,55 +18,56 @@ Map getMockJSONAPIResourceAsMap() {
 void main() {
   group("test Document creation", () {
     test("create a JSONAPIDocument with a single resource", () {
-      Map inputMap = new Map();
+      var inputMap = new Map<String, dynamic>();
       inputMap['data'] = getMockJSONAPIResourceAsMap();
 
-      JsonApiDocument expectedDocument = new JsonApiDocument(inputMap);
+      JsonApiDocument expectedDocument = JsonApiDocument.fromJson(inputMap);
 
       expect(expectedDocument.data != null, equals(true));
-      expect(expectedDocument.data is JsonApiResource, equals(true));
+      expect(expectedDocument.data.length, equals(1));
       expect(expectedDocument.errors == null, equals(true));
     });
 
     test("create a JSONAPIDocument with multiple resources", () {
-      List<Map> dataList = new List<Map>();
-      dataList.add(getMockJSONAPIResourceAsMap());
-      dataList.add(getMockJSONAPIResourceAsMap());
+      var dataList = [
+        getMockJSONAPIResourceAsMap(),
+        getMockJSONAPIResourceAsMap()
+      ];
 
-      Map inputMap = new Map();
+      var inputMap = new Map<String, dynamic>();
       inputMap['data'] = dataList;
 
-      JsonApiDocument expectedDocument = new JsonApiDocument(inputMap);
+      JsonApiDocument expectedDocument = JsonApiDocument.fromJson(inputMap);
 
       expect(expectedDocument.data != null, equals(true));
-      expect(expectedDocument.data is JSONAPIResourceList, equals(true));
+      expect(expectedDocument.data is List<JsonApiResource>, equals(true));
       expect(expectedDocument.errors == null, equals(true));
     });
 
     test("create a JSONAPIDocument from a Map with both data and errors", () {
-      List<Map> errorListMap = new List<Map>();
+      var errorListMap = new List<Map<String, dynamic>>();
 
-      Map errorMap = new Map();
+      var errorMap = new Map<String, dynamic>();
       errorMap['status'] = '500';
       errorMap['detail'] = 'Internal server error';
 
       errorListMap.add(errorMap);
 
-      Map inputMap = new Map();
+      var inputMap = new Map<String, dynamic>();
       inputMap['data'] = getMockJSONAPIResourceAsMap();
       inputMap['errors'] = errorListMap;
-      inputMap['meta'] = new List<Object>();
+      inputMap['meta'] = new Map<String, dynamic>();
 
       expect(() {
-        new JsonApiDocument(inputMap);
+        JsonApiDocument.fromJson(inputMap);
       }, throwsFormatException);
     });
 
     test("create a JSONAPIDocument from an empty map", () {
-      Map aMap = new Map();
+      var aMap = new Map<String, dynamic>();
 
       expect(() {
-        new JsonApiDocument(aMap);
+        JsonApiDocument.fromJson(aMap);
       }, throwsFormatException);
     });
   });
@@ -76,9 +77,9 @@ void main() {
       String inputJson =
           '{"data":{"type":"person","attributes":{"name":"Pasquale"}}}';
 
-      Map aMap = jsonDecode(inputJson);
-      JsonApiDocument document = new JsonApiDocument(aMap);
-      String outputJson = jsonEncode(document);
+      Map<String, dynamic> aMap = jsonDecode(inputJson);
+      JsonApiDocument document = JsonApiDocument.fromJson(aMap);
+      String outputJson = jsonEncode(document.toJson());
 
       expect(outputJson, equals(inputJson));
     });

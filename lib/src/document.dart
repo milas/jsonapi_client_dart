@@ -2,125 +2,58 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // MIT license that can be found in the LICENSE file.
 
+import 'dart:convert';
+
+import 'package:json_annotation/json_annotation.dart';
+
 import 'resource.dart';
 import 'error.dart';
+
+part 'document.g.dart';
 
 /// Dartlang representation of a JSON API Document object.
 /// Conforms to the JsonApi 1.0 specification.
 /// For any further information please visit http://jsonapi.org
-class JsonApiDocument {
-  /// The meta object of the JSON API Document.
-  Map _meta;
-  Map get meta => _meta;
+@JsonSerializable(includeIfNull: false)
+class JsonApiDocument extends Object with _$JsonApiDocumentSerializerMixin {
+  List<JsonApiError> errors;
 
-  /// The data object of the JSON API Document.
-  /// This member is mandatory by jsonapi specification. This object, by jsonapi
-  /// design, can be either an Array or a Resource, therefore the type is
-  /// intentionally generic. It will always be initialized as a Resource or as a
-  /// List of Resource instances.
-  Object _data;
-  Object get data => _data;
+  @JsonKey(fromJson: _resourcesFromJson, toJson: _resourcesToJson)
+  List<JsonApiResource> data;
 
-  /// The errors array of the JSON API Document, empty if no errors have been
-  /// received.
-  /// This member is mandatory by JSON API specification.
-  JSONAPIErrorList _errors;
-  JSONAPIErrorList get errors => _errors;
+  List<JsonApiResource> included;
 
-  /// The links object of the JSON API Document.
-  /// This member is optional by JSON API specification.
-  Map _links;
-  Map get links => _links;
+  Map<String, dynamic> meta;
 
-  /// The included resources array of the JSON API Document.
-  /// If any resource has been included, it's stored in this array following
-  /// jsonapi specification, otherwise this array is empty.
-  List<Object> _included;
-  List<Object> get included => _included;
-
-  /// The jsonapi map includes information about the implementation of the
-  /// JSON API document.
-  Map _jsonapi;
-  Map get jsonapi => _jsonapi;
-
-  JsonApiDocument(Map dictionary) {
-    if ((!dictionary.containsKey('data')) &&
-        (!dictionary.containsKey('errors'))) {
-      throw new FormatException(
-          "A JSON API document must include data or error");
+  JsonApiDocument(): super();
+  factory JsonApiDocument.fromJson(Map<String, dynamic> json) {
+    var doc = _$JsonApiDocumentFromJson(json);
+    if (doc.data != null && doc.errors != null) {
+      throw new FormatException("Cannot have both errors and data");
     }
-
-    if ((dictionary.containsKey('data')) &&
-        (dictionary.containsKey('errors'))) {
-      throw new FormatException(
-          "A JSON API document cannot include both data and error");
+    if (doc.data == null && doc.errors == null && doc.meta == null) {
+      throw new FormatException("Must include at least one of data, errors, meta");
     }
-
-    if (dictionary.containsKey('data')) {
-      _data = _initResourceFromData(dictionary['data']);
+    if (doc.data == null && doc.included != null) {
+      throw new FormatException("included cannot be present if data is not");
     }
-
-    if (dictionary.containsKey('errors')) {
-      _errors = new JSONAPIErrorList(dictionary['errors']);
-    }
-
-    if (dictionary.containsKey('meta')) {
-      _meta = dictionary['meta'];
-    }
-
-    if (dictionary.containsKey('links')) {
-      _links = dictionary['links'];
-    }
-
-    if (dictionary.containsKey('included')) {
-      _included = _initResourceFromData(dictionary['included']);
-    }
-
-    if (dictionary.containsKey('jsonapi')) {
-      _jsonapi = dictionary['jsonapi'];
-    }
+    return doc;
   }
+}
 
-  Map toJson() {
-    Map map = new Map();
-
-    if (data != null) {
-      if (data is JsonApiResource) {
-        map['data'] = (data as JsonApiResource).toJson();
-      } else {
-        map['data'] = (data as JSONAPIResourceList).toJson();
-      }
-    }
-
-    if (errors != null) {
-      map['errors'] = errors.toJson();
-    }
-
-    if (meta != null) {
-      map['meta'] = meta;
-    }
-
-    if (links != null) {
-      map['links'] = links;
-    }
-
-    if (included != null) {
-      // included objects are always in a list!
-      map['included'] = (data as JSONAPIResourceList).toJson();
-    }
-
-    if (jsonapi != null) {
-      map['jsonapi'] = jsonapi;
-    }
-
-    return map;
+List<JsonApiResource> _resourcesFromJson(Object deserialized) {
+  if (deserialized is List) {
+    return deserialized.map((e) => JsonApiResource.fromJson(e)).toList();
+  } else if (deserialized is Map<String, dynamic>) {
+    return [JsonApiResource.fromJson((deserialized))]; 
+  } else {
+    return null;
   }
+}
 
-  _initResourceFromData(rawData) {
-    if (rawData is List<Object>) {
-      return new JSONAPIResourceList(rawData);
-    } else {
-      return new JsonApiResource(rawData);
-    }
+Object _resourcesToJson(List<JsonApiResource> data) {
+  if (data.length == 1) {
+    return data[0].toJson();
   }
+  return data.map((e) => e.toJson()).toList();
 }

@@ -9,12 +9,12 @@ import "package:test/test.dart";
 
 void main() {
   group("test Error creation", () {
-    test("create a JSONAPIError from a correct Map", () {
-      Map errorMap = new Map();
+    test("create a JsonApiError from a correct Map", () {
+      var errorMap = new Map<String, dynamic>();
       errorMap['status'] = '500';
       errorMap['detail'] = 'Internal server error';
 
-      JsonApiError expectedError = new JsonApiError(errorMap);
+      JsonApiError expectedError = JsonApiError.fromJson(errorMap);
 
       expect(expectedError.status, equals('500'));
       expect(expectedError.detail, equals('Internal server error'));
@@ -25,8 +25,8 @@ void main() {
     test("encode JSONAPIError into a Map", () {
       String inputJson = '{"status":"500","detail":"Internal server error"}';
 
-      Map aMap = jsonDecode(inputJson);
-      JsonApiError error = new JsonApiError(aMap);
+      Map<String, dynamic> aMap = jsonDecode(inputJson);
+      JsonApiError error = JsonApiError.fromJson(aMap);
       String outputJson = jsonEncode(error);
 
       expect(outputJson, equals(inputJson));

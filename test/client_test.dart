@@ -10,11 +10,11 @@ import 'package:http/testing.dart';
 
 import "package:jsonapi_client/jsonapi_client.dart";
 
-Map getMockJSONAPIResourceAsMap() {
+Map<String, dynamic> getMockJSONAPIResourceAsMap() {
   return {
     "data": {
-      "type": "persons",
       "id": "1",
+      "type": "persons",
       "attributes": {"name": "Gianfranco", "surname": "Reppucci"},
       "relationships": {
         "company": {
@@ -34,7 +34,7 @@ var mockHTTPClient = new MockClient((request) async {
     }
 
     if (request.url.toString().contains('include=')) {
-      Map mockObjectWithIncluded = getMockJSONAPIResourceAsMap();
+      var mockObjectWithIncluded = getMockJSONAPIResourceAsMap();
       mockObjectWithIncluded['included'] = [
         {
           "type": "companies",
@@ -91,7 +91,7 @@ void main() {
     test("headers are properly set", () async {
       JsonApiClient c = new JsonApiClient(httpClient: mockHTTPClient);
 
-      Map fakeAdditionalHeaders = {
+      var fakeAdditionalHeaders = {
         'X-Custom-Header': 'fakeValue'
       };
 
@@ -114,8 +114,8 @@ void main() {
       JsonApiDocument d = await c.get("http://mockapi.test/persons/1");
 
       expect(c.request.method, equals('GET'));
-      expect(d.data is JsonApiResource, equals(true));
-      expect((d.data as JsonApiResource).id, equals('1'));
+      expect(d.data.length, equals(1));
+      expect(d.data[0].id, equals('1'));
       expect(d.included == null, equals(true));
     });
 
@@ -129,11 +129,10 @@ void main() {
           includeModels: includedModels);
 
       expect(c.request.method, equals('GET'));
-      expect(d.data is JsonApiResource, equals(true));
-      expect((d.data as JsonApiResource).id, equals('1'));
-      expect(d.included is JSONAPIResourceList, equals(true));
+      expect(d.data.length, equals(1));
+      expect(d.data[0].id, equals('1'));
       expect(d.included.length, equals(1));
-      expect((d.included[0] as JsonApiResource).id, equals('qurami'));
+      expect(d.included[0].id, equals('qurami'));
     });
 
     test("GET method with no include and response with JSONAPIError",
@@ -144,9 +143,9 @@ void main() {
           await c.get("http://mockapi.test/persons/non-existing");
 
       expect(c.request.method, equals('GET'));
-      expect(d.data == null, equals(true));
-      expect(d.errors is JSONAPIErrorList, equals(true));
-      expect(d.included == null, equals(true));
+      expect(d.data, isNull);
+      expect(d.errors.length, equals(1));
+      expect(d.included, isNull);
     });
 
     test("GET method with no include and unsuccessful response", () async {
@@ -165,7 +164,7 @@ void main() {
 
   group("test POST method on JSONAPI Client", () {
     test("POST method with successful response", () async {
-      Map payload = getMockJSONAPIResourceAsMap();
+      var payload = getMockJSONAPIResourceAsMap();
       payload['data'].remove('id');
 
       JsonApiClient c = new JsonApiClient(httpClient: mockHTTPClient);
@@ -173,9 +172,9 @@ void main() {
       JsonApiDocument d = await c.post('http://mockapi.test/persons', jsonEncode(payload));
 
       expect(c.request.method, equals('POST'));
-      expect(d.data is JsonApiResource, equals(true));
+      expect(d.data.length, 1);
       expect(jsonEncode(d), equals(jsonEncode(getMockJSONAPIResourceAsMap())));
-      expect(d.included == null, equals(true));
+      expect(d.included, isNull);
     });
   });
 

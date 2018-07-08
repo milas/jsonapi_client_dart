@@ -9,7 +9,7 @@ import "package:jsonapi_client/jsonapi_client.dart";
 
 void main() {
   group("test MockJSONAPIClient", () {
-    JsonApiDocument d = new JsonApiDocument({
+    JsonApiDocument d = JsonApiDocument.fromJson({
       'data': {
         'type': 'persons',
         'id': '1',
@@ -45,7 +45,7 @@ void main() {
 
       c.setOutput(d);
 
-      Map inputDocument = d.toJson();
+      var inputDocument = d.toJson();
       inputDocument['data'].remove('id');
 
       JsonApiDocument expectedDocument = await c.post('http://mockapi.test/persons', jsonEncode(inputDocument));

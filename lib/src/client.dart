@@ -93,7 +93,7 @@ class JsonApiClient {
     defaultCase:
       case 'GET':
       default:
-        return new JsonApiDocument(jsonDecode(await response.stream.bytesToString()));
+        return JsonApiDocument.fromJson(jsonDecode(await response.stream.bytesToString()));
     }
     return null;
   }
