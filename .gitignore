@@ -30,3 +30,6 @@ pubspec.lock
 .flooignore
 
 .dart_tool/
+
+# Generated files
+*.g.dart

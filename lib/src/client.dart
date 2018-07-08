@@ -5,14 +5,17 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:built_value/standard_json_plugin.dart';
 import 'package:http/http.dart' as http;
-
-import 'document.dart';
+import 'package:jsonapi_client/src/models/model.dart';
+import 'package:jsonapi_client/src/models/serializers.dart';
 
 class JSONAPIClient {
   final _JSONAPIDefaultHeaders = new Map<String, String>()
   ..['Accept'] = 'application/vnd.api+json'
   ..['Content-Type'] = 'application/vnd.api+json';
+
+  final _standardSerializers = (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
 
   http.Request request;
 
@@ -26,13 +29,13 @@ class JSONAPIClient {
     }
   }
 
-  Future<JSONAPIDocument> get(String url,
+  Future<JsonApiResponse> get(String url,
       {List<String> includeModels, Map headers}) async {
     return _call('GET', url,
         includeModels: includeModels, additionalHeaders: headers);
   }
 
-  Future<JSONAPIDocument> post(String url, String document,
+  Future<JsonApiResponse> post(String url, String document,
       {List<String> includeModels, Map headers}) async {
     return _call('POST', url,
         payload: document,
@@ -57,7 +60,7 @@ class JSONAPIClient {
     return Uri.parse(url);
   }
 
-  Future<JSONAPIDocument> _call(String method, String url,
+  Future<JsonApiResponse> _call(String method, String url,
       {String payload,
       List<String> includeModels,
       Map additionalHeaders}) async {
@@ -93,7 +96,7 @@ class JSONAPIClient {
     defaultCase:
       case 'GET':
       default:
-        return new JSONAPIDocument(jsonDecode(await response.stream.bytesToString()));
+        return _standardSerializers.deserializeWith(JsonApiResponse.serializer, jsonDecode(await response.stream.bytesToString()));
     }
     return null;
   }
