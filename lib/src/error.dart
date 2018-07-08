@@ -122,7 +122,7 @@ class JSONAPIErrorList extends ListBase{
   void set length(int newLength) { l.length = newLength; }
   int get length => l.length;
   JSONAPIError operator [](int index) => l[index];
-  void operator []=(int index, JSONAPIError value) { l[index] = value; }
+  void operator []=(int index, dynamic value) { l[index] = value; }
 
   List<Map> toJson() {
     List<Map> mapList = new List<Map>();

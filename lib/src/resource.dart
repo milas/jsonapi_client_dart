@@ -91,7 +91,7 @@ class JSONAPIResourceList extends ListBase{
   void set length(int newLength) { l.length = newLength; }
   int get length => l.length;
   JSONAPIResource operator [](int index) => l[index];
-  void operator []=(int index, JSONAPIResource value) { l[index] = value; }
+  operator []=(int index, dynamic value) { l[index] = value; }
 
   List<Map> toJson() {
     List<Map> mapList = new List<Map>();
