@@ -6,7 +6,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart' as path;
 
 import 'document.dart';
 
@@ -55,7 +54,7 @@ class JSONAPIClient {
       url += queryOperator + "include=" + includeModels.join(",");
     }
 
-    return path.toUri(url);
+    return Uri.parse(url);
   }
 
   _call(String method, String url,
