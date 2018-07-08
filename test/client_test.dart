@@ -26,7 +26,7 @@ Map getMockJSONAPIResourceAsMap() {
   };
 }
 
-var mockHTTPClient = new MockClient((request) {
+var mockHTTPClient = new MockClient((request) async {
   if (request.method == 'GET'){
     if (request.url.toString() == "http://mockapi.test/persons/1") {
       return new http.Response(JSON.encode(getMockJSONAPIResourceAsMap()), 200,
