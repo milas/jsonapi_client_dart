@@ -88,7 +88,7 @@ class JSONAPIResourceList extends ListBase{
     }
   }
 
-  void set length(int newLength) { l.length = newLength; }
+  set length(int newLength) { l.length = newLength; }
   int get length => l.length;
   JSONAPIResource operator [](int index) => l[index];
   operator []=(int index, dynamic value) { l[index] = value; }

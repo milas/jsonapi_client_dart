@@ -18,7 +18,7 @@ class JSONAPIClient {
 
   var _http;
 
-  JSONAPIClient({dynamic httpClient: null}) {
+  JSONAPIClient({dynamic httpClient}) {
     if (httpClient != null) {
       _http = httpClient;
     } else {
