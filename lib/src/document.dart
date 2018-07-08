@@ -8,7 +8,7 @@ import 'error.dart';
 /// Dartlang representation of a JSON API Document object.
 /// Conforms to the JsonApi 1.0 specification.
 /// For any further information please visit http://jsonapi.org
-class JSONAPIDocument {
+class JsonApiDocument {
   /// The meta object of the JSON API Document.
   Map _meta;
   Map get meta => _meta;
@@ -43,7 +43,7 @@ class JSONAPIDocument {
   Map _jsonapi;
   Map get jsonapi => _jsonapi;
 
-  JSONAPIDocument(Map dictionary) {
+  JsonApiDocument(Map dictionary) {
     if ((!dictionary.containsKey('data')) &&
         (!dictionary.containsKey('errors'))) {
       throw new FormatException(
@@ -85,8 +85,8 @@ class JSONAPIDocument {
     Map map = new Map();
 
     if (data != null) {
-      if (data is JSONAPIResource) {
-        map['data'] = (data as JSONAPIResource).toJson();
+      if (data is JsonApiResource) {
+        map['data'] = (data as JsonApiResource).toJson();
       } else {
         map['data'] = (data as JSONAPIResourceList).toJson();
       }
@@ -120,7 +120,7 @@ class JSONAPIDocument {
     if (rawData is List<Object>) {
       return new JSONAPIResourceList(rawData);
     } else {
-      return new JSONAPIResource(rawData);
+      return new JsonApiResource(rawData);
     }
   }
 }

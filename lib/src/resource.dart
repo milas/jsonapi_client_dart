@@ -7,7 +7,7 @@ import 'dart:collection';
 /// Dartlang representation of a JSON API Document object.
 /// Conforms to the JsonApi 1.0 specification.
 /// For any further information please visit http://jsonapi.org
-class JSONAPIResource {
+class JsonApiResource {
   /// The id of the JSON API Resource.
   /// The id is not required when the resource object originates at the
   /// client and represents a new resource to be created on the server.
@@ -30,7 +30,7 @@ class JSONAPIResource {
   Map _relationships; // @TODO: change to JSONAPIRelationshipList?
   Map get relationships => _relationships;
 
-  JSONAPIResource(Map dictionary) {
+  JsonApiResource(Map dictionary) {
     if (!dictionary.containsKey('type')) {
       throw new FormatException("Missing type");
     }
@@ -80,23 +80,23 @@ class JSONAPIResource {
 }
 
 class JSONAPIResourceList extends ListBase{
-  final List<JSONAPIResource> l = [];
+  final List<JsonApiResource> l = [];
 
   JSONAPIResourceList(List<Map> data){
     for(Map dictionary in data){
-      l.add(new JSONAPIResource(dictionary));
+      l.add(new JsonApiResource(dictionary));
     }
   }
 
   set length(int newLength) { l.length = newLength; }
   int get length => l.length;
-  JSONAPIResource operator [](int index) => l[index];
+  JsonApiResource operator [](int index) => l[index];
   operator []=(int index, dynamic value) { l[index] = value; }
 
   List<Map> toJson() {
     List<Map> mapList = new List<Map>();
 
-    for (JSONAPIResource resource in l) {
+    for (JsonApiResource resource in l) {
       mapList.add(resource.toJson());
     }
 

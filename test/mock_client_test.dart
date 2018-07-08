@@ -9,7 +9,7 @@ import "package:jsonapi_client/jsonapi_client.dart";
 
 void main() {
   group("test MockJSONAPIClient", () {
-    JSONAPIDocument d = new JSONAPIDocument({
+    JsonApiDocument d = new JsonApiDocument({
       'data': {
         'type': 'persons',
         'id': '1',
@@ -21,16 +21,16 @@ void main() {
     });
 
     test("client get method returns the input value using setOutput", () async {
-      MockJSONAPIClient c = new MockJSONAPIClient();
+      MockJsonApiClient c = new MockJsonApiClient();
 
       c.setOutput(d);
 
-      JSONAPIDocument expectedDocument = await c.get('http://mockapi.test/persons/1');
+      JsonApiDocument expectedDocument = await c.get('http://mockapi.test/persons/1');
       expect(expectedDocument.toJson(), equals(d.toJson()));
     });
 
     test("client get method sets proper debug request parameters", () async {
-      MockJSONAPIClient c = new MockJSONAPIClient();
+      MockJsonApiClient c = new MockJsonApiClient();
 
       await c.get('http://mockapi.test/persons/1', includeModels: ['company'], headers: {'X-Test': 'Mock-Value'});
       expect(c.requestUrl, equals('http://mockapi.test/persons/1'));
@@ -41,19 +41,19 @@ void main() {
     });
 
     test("client post method returns the input value using setOutput", () async {
-      MockJSONAPIClient c = new MockJSONAPIClient();
+      MockJsonApiClient c = new MockJsonApiClient();
 
       c.setOutput(d);
 
       Map inputDocument = d.toJson();
       inputDocument['data'].remove('id');
 
-      JSONAPIDocument expectedDocument = await c.post('http://mockapi.test/persons', jsonEncode(inputDocument));
+      JsonApiDocument expectedDocument = await c.post('http://mockapi.test/persons', jsonEncode(inputDocument));
       expect(expectedDocument.toJson(), equals(d.toJson()));
     });
 
     test("client post method sets proper debug request parameters", () async {
-      MockJSONAPIClient c = new MockJSONAPIClient();
+      MockJsonApiClient c = new MockJsonApiClient();
 
       Map inputDocument = d.toJson();
       inputDocument['data'].remove('id');
@@ -68,16 +68,16 @@ void main() {
     });
 
     test("client delete method returns the input value using setOutput", () async {
-      MockJSONAPIClient c = new MockJSONAPIClient();
+      MockJsonApiClient c = new MockJsonApiClient();
 
       c.setOutput(d);
 
-      JSONAPIDocument expectedDocument = await c.delete('http://mockapi.test/persons/1');
+      JsonApiDocument expectedDocument = await c.delete('http://mockapi.test/persons/1');
       expect(expectedDocument.toJson(), equals(d.toJson()));
     });
 
     test("client delete method sets proper debug request parameters", () async {
-      MockJSONAPIClient c = new MockJSONAPIClient();
+      MockJsonApiClient c = new MockJsonApiClient();
 
       await c.delete('http://mockapi.test/persons/1', headers: {'X-Test': 'Mock-Value'});
       expect(c.requestUrl, 'http://mockapi.test/persons/1');

@@ -7,7 +7,7 @@ import 'dart:async';
 import 'client.dart';
 import 'document.dart';
 
-class MockJSONAPIClient implements JSONAPIClient {
+class MockJsonApiClient implements JsonApiClient {
   var request; // unused
 
   String _url;
@@ -35,14 +35,14 @@ class MockJSONAPIClient implements JSONAPIClient {
     _desiredOutput = output;
   }
 
-  Future<JSONAPIDocument> get(String url,
+  Future<JsonApiDocument> get(String url,
       {List<String> includeModels: null, Map headers: null}) async {
         _saveRequest(url: url, includeModels: includeModels, headers: headers);
 
         return new Future.value(_desiredOutput);
       }
 
-  Future<JSONAPIDocument> post(String url, String payload,
+  Future<JsonApiDocument> post(String url, String payload,
     {List<String> includeModels, Map headers}) async {
       _saveRequest(url: url, payload: payload, includeModels: includeModels, headers: headers);
 

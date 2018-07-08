@@ -15,7 +15,7 @@ void main() {
       dataMap['attributes'] = new Map();
       dataMap['attributes']['name'] = 'Pasquale';
 
-      JSONAPIResource expectedResource = new JSONAPIResource(dataMap);
+      JsonApiResource expectedResource = new JsonApiResource(dataMap);
 
       expect(expectedResource.type, equals('person'));
     });
@@ -26,7 +26,7 @@ void main() {
       dataMap['attributes']['name'] = 'Pasquale';
 
       expect(() {
-        new JSONAPIResource(dataMap);
+        new JsonApiResource(dataMap);
       }, throwsFormatException);
     });
   });
@@ -36,7 +36,7 @@ void main() {
       String inputJson = '{"type":"person","attributes":{"name":"Pasquale"}}';
 
       Map inputMap = jsonDecode(inputJson);
-      JSONAPIResource resource = new JSONAPIResource(inputMap);
+      JsonApiResource resource = new JsonApiResource(inputMap);
       String outputJson = jsonEncode(resource);
 
       expect(outputJson, equals(inputJson));

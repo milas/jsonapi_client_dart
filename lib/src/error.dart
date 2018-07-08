@@ -4,7 +4,7 @@
 
 import 'dart:collection';
 
-class JSONAPIError {
+class JsonApiError {
   /// The id of the JSON API Error.
   String _id;
   String get id => _id;
@@ -37,7 +37,7 @@ class JSONAPIError {
   Map _meta;
   Map get meta => _meta;
 
-  JSONAPIError(Map dictionary) {
+  JsonApiError(Map dictionary) {
     if (dictionary.containsKey('id')) {
       _id = dictionary['id'];
     }
@@ -111,23 +111,23 @@ class JSONAPIError {
 }
 
 class JSONAPIErrorList extends ListBase{
-  final List<JSONAPIError> l = [];
+  final List<JsonApiError> l = [];
 
   JSONAPIErrorList(List<Map> data){
     for(Map dictionary in data){
-      l.add(new JSONAPIError(dictionary));
+      l.add(new JsonApiError(dictionary));
     }
   }
 
   set length(int newLength) { l.length = newLength; }
   int get length => l.length;
-  JSONAPIError operator [](int index) => l[index];
+  JsonApiError operator [](int index) => l[index];
   void operator []=(int index, dynamic value) { l[index] = value; }
 
   List<Map> toJson() {
     List<Map> mapList = new List<Map>();
 
-    for (JSONAPIError error in l) {
+    for (JsonApiError error in l) {
       mapList.add(error.toJson());
     }
 

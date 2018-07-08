@@ -79,7 +79,7 @@ var mockHTTPClient = new MockClient((request) async {
 void main() {
   group("test basic behaviour on JSONAPI Client", () {
     test("url is properly set", () async {
-      JSONAPIClient c = new JSONAPIClient(httpClient: mockHTTPClient);
+      JsonApiClient c = new JsonApiClient(httpClient: mockHTTPClient);
 
       await c.get("http://mockapi.test/persons/1", includeModels: ["company", "contacts"]);
       expect(c.request.url.toString(), equals("http://mockapi.test/persons/1?include=company,contacts"));
@@ -89,7 +89,7 @@ void main() {
     });
 
     test("headers are properly set", () async {
-      JSONAPIClient c = new JSONAPIClient(httpClient: mockHTTPClient);
+      JsonApiClient c = new JsonApiClient(httpClient: mockHTTPClient);
 
       Map fakeAdditionalHeaders = {
         'X-Custom-Header': 'fakeValue'
@@ -109,38 +109,38 @@ void main() {
   group("test GET method on JSONAPI Client", () {
     test("GET method with no include and successful response with single item",
         () async {
-      JSONAPIClient c = new JSONAPIClient(httpClient: mockHTTPClient);
+      JsonApiClient c = new JsonApiClient(httpClient: mockHTTPClient);
 
-      JSONAPIDocument d = await c.get("http://mockapi.test/persons/1");
+      JsonApiDocument d = await c.get("http://mockapi.test/persons/1");
 
       expect(c.request.method, equals('GET'));
-      expect(d.data is JSONAPIResource, equals(true));
-      expect((d.data as JSONAPIResource).id, equals('1'));
+      expect(d.data is JsonApiResource, equals(true));
+      expect((d.data as JsonApiResource).id, equals('1'));
       expect(d.included == null, equals(true));
     });
 
     test(
         "GET method with included model and successful response with single item",
         () async {
-      JSONAPIClient c = new JSONAPIClient(httpClient: mockHTTPClient);
+      JsonApiClient c = new JsonApiClient(httpClient: mockHTTPClient);
       List<String> includedModels = ["company"];
 
-      JSONAPIDocument d = await c.get("http://mockapi.test/persons/1",
+      JsonApiDocument d = await c.get("http://mockapi.test/persons/1",
           includeModels: includedModels);
 
       expect(c.request.method, equals('GET'));
-      expect(d.data is JSONAPIResource, equals(true));
-      expect((d.data as JSONAPIResource).id, equals('1'));
+      expect(d.data is JsonApiResource, equals(true));
+      expect((d.data as JsonApiResource).id, equals('1'));
       expect(d.included is JSONAPIResourceList, equals(true));
       expect(d.included.length, equals(1));
-      expect((d.included[0] as JSONAPIResource).id, equals('qurami'));
+      expect((d.included[0] as JsonApiResource).id, equals('qurami'));
     });
 
     test("GET method with no include and response with JSONAPIError",
         () async {
-      JSONAPIClient c = new JSONAPIClient(httpClient: mockHTTPClient);
+      JsonApiClient c = new JsonApiClient(httpClient: mockHTTPClient);
 
-      JSONAPIDocument d =
+      JsonApiDocument d =
           await c.get("http://mockapi.test/persons/non-existing");
 
       expect(c.request.method, equals('GET'));
@@ -150,7 +150,7 @@ void main() {
     });
 
     test("GET method with no include and unsuccessful response", () async {
-      JSONAPIClient c = new JSONAPIClient(httpClient: mockHTTPClient);
+      JsonApiClient c = new JsonApiClient(httpClient: mockHTTPClient);
 
       var expectedException = null;
       try {
@@ -168,12 +168,12 @@ void main() {
       Map payload = getMockJSONAPIResourceAsMap();
       payload['data'].remove('id');
 
-      JSONAPIClient c = new JSONAPIClient(httpClient: mockHTTPClient);
+      JsonApiClient c = new JsonApiClient(httpClient: mockHTTPClient);
 
-      JSONAPIDocument d = await c.post('http://mockapi.test/persons', jsonEncode(payload));
+      JsonApiDocument d = await c.post('http://mockapi.test/persons', jsonEncode(payload));
 
       expect(c.request.method, equals('POST'));
-      expect(d.data is JSONAPIResource, equals(true));
+      expect(d.data is JsonApiResource, equals(true));
       expect(jsonEncode(d), equals(jsonEncode(getMockJSONAPIResourceAsMap())));
       expect(d.included == null, equals(true));
     });
@@ -181,7 +181,7 @@ void main() {
 
   group("test DELETE method on JSONAPI Client", () {
     test("DELETE method with successful response (no data)", () async {
-      JSONAPIClient c = new JSONAPIClient(httpClient: mockHTTPClient);
+      JsonApiClient c = new JsonApiClient(httpClient: mockHTTPClient);
 
       var expectedException = null;
       try {

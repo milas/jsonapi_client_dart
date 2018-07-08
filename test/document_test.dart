@@ -21,10 +21,10 @@ void main() {
       Map inputMap = new Map();
       inputMap['data'] = getMockJSONAPIResourceAsMap();
 
-      JSONAPIDocument expectedDocument = new JSONAPIDocument(inputMap);
+      JsonApiDocument expectedDocument = new JsonApiDocument(inputMap);
 
       expect(expectedDocument.data != null, equals(true));
-      expect(expectedDocument.data is JSONAPIResource, equals(true));
+      expect(expectedDocument.data is JsonApiResource, equals(true));
       expect(expectedDocument.errors == null, equals(true));
     });
 
@@ -36,7 +36,7 @@ void main() {
       Map inputMap = new Map();
       inputMap['data'] = dataList;
 
-      JSONAPIDocument expectedDocument = new JSONAPIDocument(inputMap);
+      JsonApiDocument expectedDocument = new JsonApiDocument(inputMap);
 
       expect(expectedDocument.data != null, equals(true));
       expect(expectedDocument.data is JSONAPIResourceList, equals(true));
@@ -58,7 +58,7 @@ void main() {
       inputMap['meta'] = new List<Object>();
 
       expect(() {
-        new JSONAPIDocument(inputMap);
+        new JsonApiDocument(inputMap);
       }, throwsFormatException);
     });
 
@@ -66,7 +66,7 @@ void main() {
       Map aMap = new Map();
 
       expect(() {
-        new JSONAPIDocument(aMap);
+        new JsonApiDocument(aMap);
       }, throwsFormatException);
     });
   });
@@ -77,7 +77,7 @@ void main() {
           '{"data":{"type":"person","attributes":{"name":"Pasquale"}}}';
 
       Map aMap = jsonDecode(inputJson);
-      JSONAPIDocument document = new JSONAPIDocument(aMap);
+      JsonApiDocument document = new JsonApiDocument(aMap);
       String outputJson = jsonEncode(document);
 
       expect(outputJson, equals(inputJson));

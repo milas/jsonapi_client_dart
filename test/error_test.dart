@@ -14,7 +14,7 @@ void main() {
       errorMap['status'] = '500';
       errorMap['detail'] = 'Internal server error';
 
-      JSONAPIError expectedError = new JSONAPIError(errorMap);
+      JsonApiError expectedError = new JsonApiError(errorMap);
 
       expect(expectedError.status, equals('500'));
       expect(expectedError.detail, equals('Internal server error'));
@@ -26,7 +26,7 @@ void main() {
       String inputJson = '{"status":"500","detail":"Internal server error"}';
 
       Map aMap = jsonDecode(inputJson);
-      JSONAPIError error = new JSONAPIError(aMap);
+      JsonApiError error = new JsonApiError(aMap);
       String outputJson = jsonEncode(error);
 
       expect(outputJson, equals(inputJson));

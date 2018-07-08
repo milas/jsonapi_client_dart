@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 import 'document.dart';
 
-class JSONAPIClient {
+class JsonApiClient {
   final _JSONAPIDefaultHeaders = new Map<String, String>()
   ..['Accept'] = 'application/vnd.api+json'
   ..['Content-Type'] = 'application/vnd.api+json';
@@ -18,7 +18,7 @@ class JSONAPIClient {
 
   var _http;
 
-  JSONAPIClient({dynamic httpClient}) {
+  JsonApiClient({dynamic httpClient}) {
     if (httpClient != null) {
       _http = httpClient;
     } else {
@@ -26,13 +26,13 @@ class JSONAPIClient {
     }
   }
 
-  Future<JSONAPIDocument> get(String url,
+  Future<JsonApiDocument> get(String url,
       {List<String> includeModels, Map headers}) async {
     return _call('GET', url,
         includeModels: includeModels, additionalHeaders: headers);
   }
 
-  Future<JSONAPIDocument> post(String url, String document,
+  Future<JsonApiDocument> post(String url, String document,
       {List<String> includeModels, Map headers}) async {
     return _call('POST', url,
         payload: document,
@@ -57,7 +57,7 @@ class JSONAPIClient {
     return Uri.parse(url);
   }
 
-  Future<JSONAPIDocument> _call(String method, String url,
+  Future<JsonApiDocument> _call(String method, String url,
       {String payload,
       List<String> includeModels,
       Map additionalHeaders}) async {
@@ -93,7 +93,7 @@ class JSONAPIClient {
     defaultCase:
       case 'GET':
       default:
-        return new JSONAPIDocument(jsonDecode(await response.stream.bytesToString()));
+        return new JsonApiDocument(jsonDecode(await response.stream.bytesToString()));
     }
     return null;
   }
