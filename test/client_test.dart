@@ -29,7 +29,7 @@ Map getMockJSONAPIResourceAsMap() {
 var mockHTTPClient = new MockClient((request) async {
   if (request.method == 'GET'){
     if (request.url.toString() == "http://mockapi.test/persons/1") {
-      return new http.Response(JSON.encode(getMockJSONAPIResourceAsMap()), 200,
+      return new http.Response(jsonEncode(getMockJSONAPIResourceAsMap()), 200,
           headers: {'content-type': 'application/vnd.api+json'});
     }
 
@@ -42,13 +42,13 @@ var mockHTTPClient = new MockClient((request) async {
           "attributes": {"name": "Qurami"}
         }
       ];
-      return new http.Response(JSON.encode(mockObjectWithIncluded), 200,
+      return new http.Response(jsonEncode(mockObjectWithIncluded), 200,
           headers: {'content-type': 'application/vnd.api+json'});
     }
 
     if (request.url.toString() == "http://mockapi.test/persons/non-existing") {
       return new http.Response(
-          JSON.encode({
+          jsonEncode({
             "errors": [
               {"status": "404", "detail": "Object not found"}
             ]
@@ -65,7 +65,7 @@ var mockHTTPClient = new MockClient((request) async {
   if ((request.url.toString() == "http://mockapi.test/persons") &&
       (request.method == "POST")) {
     return new http.Response(
-        JSON.encode(getMockJSONAPIResourceAsMap()),
+        jsonEncode(getMockJSONAPIResourceAsMap()),
         200,
         headers: {'content-type': 'application/vnd.api+json'});
   }
@@ -170,11 +170,11 @@ void main() {
 
       JSONAPIClient c = new JSONAPIClient(httpClient: mockHTTPClient);
 
-      JSONAPIDocument d = await c.post('http://mockapi.test/persons', JSON.encode(payload));
+      JSONAPIDocument d = await c.post('http://mockapi.test/persons', jsonEncode(payload));
 
       expect(c.request.method, equals('POST'));
       expect(d.data is JSONAPIResource, equals(true));
-      expect(JSON.encode(d), equals(JSON.encode(getMockJSONAPIResourceAsMap())));
+      expect(jsonEncode(d), equals(jsonEncode(getMockJSONAPIResourceAsMap())));
       expect(d.included == null, equals(true));
     });
   });

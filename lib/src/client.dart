@@ -93,7 +93,7 @@ class JSONAPIClient {
     defaultCase:
       case 'GET':
       default:
-        return new JSONAPIDocument(JSON.decode(await response.stream.bytesToString()));
+        return new JSONAPIDocument(jsonDecode(await response.stream.bytesToString()));
     }
     return null;
   }

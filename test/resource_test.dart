@@ -35,9 +35,9 @@ void main() {
     test("encode JSONAPIResource into a Map", () {
       String inputJson = '{"type":"person","attributes":{"name":"Pasquale"}}';
 
-      Map inputMap = JSON.decode(inputJson);
+      Map inputMap = jsonDecode(inputJson);
       JSONAPIResource resource = new JSONAPIResource(inputMap);
-      String outputJson = JSON.encode(resource);
+      String outputJson = jsonEncode(resource);
 
       expect(outputJson, equals(inputJson));
     });
@@ -46,9 +46,9 @@ void main() {
       String inputJson =
           '[{"type":"person","attributes":{"name":"Pasquale"}},{"type":"person","attributes":{"name":"Federico"}}]';
 
-      List<Map> inputMap = JSON.decode(inputJson);
+      List<Map> inputMap = jsonDecode(inputJson);
       JSONAPIResourceList resourceList = new JSONAPIResourceList(inputMap);
-      String outputJson = JSON.encode(resourceList);
+      String outputJson = jsonEncode(resourceList);
 
       expect(outputJson, equals(inputJson));
     });

@@ -76,9 +76,9 @@ void main() {
       String inputJson =
           '{"data":{"type":"person","attributes":{"name":"Pasquale"}}}';
 
-      Map aMap = JSON.decode(inputJson);
+      Map aMap = jsonDecode(inputJson);
       JSONAPIDocument document = new JSONAPIDocument(aMap);
-      String outputJson = JSON.encode(document);
+      String outputJson = jsonEncode(document);
 
       expect(outputJson, equals(inputJson));
     });

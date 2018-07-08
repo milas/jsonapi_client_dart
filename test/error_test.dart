@@ -25,9 +25,9 @@ void main() {
     test("encode JSONAPIError into a Map", () {
       String inputJson = '{"status":"500","detail":"Internal server error"}';
 
-      Map aMap = JSON.decode(inputJson);
+      Map aMap = jsonDecode(inputJson);
       JSONAPIError error = new JSONAPIError(aMap);
-      String outputJson = JSON.encode(error);
+      String outputJson = jsonEncode(error);
 
       expect(outputJson, equals(inputJson));
     });

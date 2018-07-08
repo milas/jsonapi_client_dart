@@ -48,7 +48,7 @@ void main() {
       Map inputDocument = d.toJson();
       inputDocument['data'].remove('id');
 
-      JSONAPIDocument expectedDocument = await c.post('http://mockapi.test/persons', JSON.encode(inputDocument));
+      JSONAPIDocument expectedDocument = await c.post('http://mockapi.test/persons', jsonEncode(inputDocument));
       expect(expectedDocument.toJson(), equals(d.toJson()));
     });
 
@@ -58,10 +58,10 @@ void main() {
       Map inputDocument = d.toJson();
       inputDocument['data'].remove('id');
 
-      await c.post('http://mockapi.test/persons', JSON.encode(inputDocument), includeModels: ['company'], headers: {'X-Test': 'Mock-Value'});
+      await c.post('http://mockapi.test/persons', jsonEncode(inputDocument), includeModels: ['company'], headers: {'X-Test': 'Mock-Value'});
 
       expect(c.requestUrl, equals('http://mockapi.test/persons'));
-      expect(c.requestPayload, JSON.encode(inputDocument));
+      expect(c.requestPayload, jsonEncode(inputDocument));
       expect(c.requestIncludedModels.length, equals(1));
       expect(c.requestIncludedModels[0], equals('company'));
       expect(c.requestHeaders['X-Test'], equals('Mock-Value'));
