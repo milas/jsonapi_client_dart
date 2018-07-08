@@ -5,7 +5,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:http/browser_client.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 
@@ -24,7 +23,7 @@ class JSONAPIClient {
     if (httpClient != null) {
       _http = httpClient;
     } else {
-      _http = new BrowserClient();
+      _http = new http.Client();
     }
   }
 
