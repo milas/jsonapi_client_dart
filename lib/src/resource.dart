@@ -2,9 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // MIT license that can be found in the LICENSE file.
 
-import 'dart:collection';
-
 import 'package:json_annotation/json_annotation.dart';
+import 'package:jsonapi_client/src/relationship.dart';
 
 part 'resource.g.dart';
 
@@ -29,9 +28,9 @@ class JsonApiResource extends Object with _$JsonApiResourceSerializerMixin {
   Map<String, dynamic> links;
 
   /// The relationships of the JSON API Resource, represented as a Map.
-  Map<String, dynamic> relationships;
+  Map<String, JsonApiRelationship> relationships;
 
-  JsonApiResource(): super();
+  JsonApiResource() : super();
   factory JsonApiResource.fromJson(Map<String, dynamic> json) {
     if (!json.containsKey('type') || json['type'] == null) {
       throw new FormatException("Resource object has no type");

@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:jsonapi_client/src/ref.dart';
 
 import 'resource.dart';
 import 'error.dart';
@@ -38,6 +39,10 @@ class JsonApiDocument extends Object with _$JsonApiDocumentSerializerMixin {
       throw new FormatException("included cannot be present if data is not");
     }
     return doc;
+  }
+
+  JsonApiResource findIncluded(JsonApiResourceRef ref) {
+    return this.included.firstWhere((resource) => resource.type == ref.type && resource.id == ref.id);
   }
 }
 
