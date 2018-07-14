@@ -18,7 +18,7 @@ class JsonApiClient {
 
   var _http;
 
-  JsonApiClient({dynamic httpClient}) {
+  JsonApiClient({http.Client httpClient}) {
     if (httpClient != null) {
       _http = httpClient;
     } else {
